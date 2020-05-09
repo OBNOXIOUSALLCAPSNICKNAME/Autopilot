@@ -55,7 +55,6 @@ def resize_image(image, resolution, scale, offset, inter):
 
 
 old_colors = [
-[0, 0, 0],
 [0, 0, 128],
 [0, 0, 255],
 [0, 128, 128],
@@ -104,7 +103,6 @@ new_colors = [
 [19, 19, 19],
 [20, 20, 20],
 [21, 21, 21],
-[22, 22, 22],
 
 [0, 0, 0],
 [0, 0, 0]
