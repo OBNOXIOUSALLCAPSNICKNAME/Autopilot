@@ -20,14 +20,6 @@ except:
 
 
 def test(args):
-
-    self.dataloader = DataLoader(
-    input='E:/Autopilot/input/videos',
-    output='E:/Autopilot/output/kek',
-    ignore_nesting=False,
-    frames_to_skip=0
-    )
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model_file_name = os.path.split(args.model_path)[1]

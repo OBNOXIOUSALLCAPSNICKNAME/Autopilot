@@ -12,6 +12,8 @@ from ptsemseg.loader import get_loader
 from ptsemseg.metrics import runningScore
 from ptsemseg.utils import convert_state_dict
 
+#from loaders import DataLoader
+
 torch.backends.cudnn.benchmark = True
 
 
@@ -32,6 +34,7 @@ def validate(cfg, args):
 
     n_classes = loader.n_classes
 
+    #valloader = data.DataLoader(loader, batch_size=cfg["training"]["batch_size"], num_workers=8)
     valloader = data.DataLoader(loader, batch_size=cfg["training"]["batch_size"], num_workers=8)
     running_metrics = runningScore(n_classes)
 
@@ -43,7 +46,9 @@ def validate(cfg, args):
     model.eval()
     model.to(device)
 
+    #for i, (images, labels) in enumerate(valloader):
     for i, (images, labels) in enumerate(valloader):
+    #for i, (images, labels) in enumerate(valloader):
         start_time = timeit.default_timer()
 
         images = images.to(device)
@@ -69,7 +74,7 @@ def validate(cfg, args):
         if args.measure_time:
             elapsed_time = timeit.default_timer() - start_time
             print(
-                "Inference time \
+                "Inference time /
                   (iter {0:5d}): {1:3.5f} fps".format(
                     i + 1, pred.shape[0] / elapsed_time
                 )
@@ -91,28 +96,28 @@ if __name__ == "__main__":
         "--config",
         nargs="?",
         type=str,
-        default="configs/fcn8s_pascal.yml",
+        default="E:/Autopilot/pytorch-semseg-master/runs/52280/custom.yml",
         help="Config file to be used",
     )
     parser.add_argument(
         "--model_path",
         nargs="?",
         type=str,
-        default="fcn8s_pascal_1_26.pkl",
+        default="E:/Autopilot/pytorch-semseg-master/runs/52280/EAutopilotpytorch-semseg-masterruns52280.pkl",
         help="Path to the saved model",
     )
     parser.add_argument(
         "--eval_flip",
         dest="eval_flip",
         action="store_true",
-        help="Enable evaluation with flipped image |\
+        help="Enable evaluation with flipped image |/
                               True by default",
     )
     parser.add_argument(
         "--no-eval_flip",
         dest="eval_flip",
         action="store_false",
-        help="Disable evaluation with flipped image |\
+        help="Disable evaluation with flipped image |/
                               True by default",
     )
     parser.set_defaults(eval_flip=True)
@@ -121,14 +126,14 @@ if __name__ == "__main__":
         "--measure_time",
         dest="measure_time",
         action="store_true",
-        help="Enable evaluation with time (fps) measurement |\
+        help="Enable evaluation with time (fps) measurement |/
                               True by default",
     )
     parser.add_argument(
         "--no-measure_time",
         dest="measure_time",
         action="store_false",
-        help="Disable evaluation with time (fps) measurement |\
+        help="Disable evaluation with time (fps) measurement |/
                               True by default",
     )
     parser.set_defaults(measure_time=True)
