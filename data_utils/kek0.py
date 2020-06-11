@@ -86,7 +86,7 @@ def resize_crop(img):
 
     cropped = img[y:h, 0:w]
 
-    result = cv2.resize(cropped, None, fx=0.25, fy=0.25, interpolation=cv2.INTER_NEAREST)
+    result = cv2.resize(cropped, None, fx=0.35, fy=0.35, interpolation=cv2.INTER_NEAREST)
 
     return result
 

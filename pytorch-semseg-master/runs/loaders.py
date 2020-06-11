@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class DataLoader():
-    def __init__(self, input, output, ignore_nesting=False, frames_to_skip=0):
+    def __init__(self, input, output, ignore_nesting, frames_to_skip):
         self.input = input
         self.output = output
         self.nfskip = max(frames_to_skip, 0)
@@ -77,7 +77,7 @@ class DataLoader():
         self.svid = cv2.VideoWriter(
         path, cv2.VideoWriter_fourcc(*'mp4v'), self.fps, (w, h))
 
-    def release(self):
+    def __release__(self):
         if self.rvid:
             self.rvid.release()
         if self.svid:
@@ -91,14 +91,14 @@ class DataLoader():
 
     def __next__(self):
         if self.iter == self.last and self.frame + self.nfskip >= self.nframes:
-            self.release()
+            self.__release__()
             raise StopIteration
         else:
             self.type = self.data[max(self.iter, 0)][1][0]
             if self.type == 'image':
                 self.iter += 1
             elif self.frame + self.nfskip >= self.nframes:
-                self.release()
+                self.__release__()
                 self.iter += 1
 
             path, type, name, out = self.data[self.iter]
@@ -109,14 +109,13 @@ class DataLoader():
             else:
                 if self.frame + self.nfskip >= self.nframes:
                     self.__init_rvid__()
-                    self.svid = None
                 while self.frame % (self.nfskip+1) != 0:
                     self.frame += 1
                     _, img = self.rvid.read()
                 self.frame += 1
                 _, img = self.rvid.read()
                 name = '{}_{}'.format(name, self.frame)
-            return img, type, name, out, self.frame
+            return img, type, name, out
 
 
     def save_results(self, img, img_format='jpg'):
